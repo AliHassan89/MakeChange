@@ -38,49 +38,36 @@ public class MakingChange
     public static void main(String[] args) 
     {
         int[] coins = {1,2,3};
-        System.out.println(numberOfWaysToMakeChange(4, coins));
+        int len = coins.length;
+        int sum = 4;
+        System.out.println(numberOfWaysToMakeChange(coins, len, sum));
     }
     
-    private static int numberOfWaysToMakeChange(int amount, int[] coins)
+    private static numberOfWaysToMakeChange(int coins[], int len, int n)
     {
-        if (coins.length == 0)
-        {
-            return 0;
-        }
-        Arrays.sort(coins);
-        
-        return numberOfWaysToMakeChangeUtil(amount, coins, coins.length-1, 0);
-    }
-    
-    private static int numberOfWaysToMakeChangeUtil(int amount, int[] coins, int index, int totalWays)
-    {
-        if (index < 0)
-            return 0;
-        
-        int diff = amount - coins[index];
-        if (diff < 0)
-        {
-            totalWays = numberOfWaysToMakeChangeUtil(amount, coins, --index, totalWays);
-        }
-        else if (diff == 0)
-        {
-            totalWays++;
-            if (index > 0)
-            {
-                totalWays = numberOfWaysToMakeChangeUtil(amount, coins, --index, totalWays);
-            }
-            return totalWays;
-        }
-        else
-        {
-            totalWays = numberOfWaysToMakeChangeUtil(diff, coins, index, totalWays);
-            if (index > 0)
-            {
-                totalWays = numberOfWaysToMakeChangeUtil(amount, coins, --index, totalWays);
-            }
-        }
-        
-        return totalWays;
+        //Time complexity of this function: O(len * n)
+        //Space Complexity of this function: O(n)
+ 
+        // table[i] will be storing the number of solutions
+        // for value i. We need n+1 rows as the table is
+        // constructed in bottom up manner using the base
+        // case (n = 0)
+        long[] table = new long[n+1];
+ 
+        // Initialize all table values as 0
+        Arrays.fill(table, 0);   //O(n)
+ 
+        // Base case (If given value is 0)
+        table[0] = 1;
+ 
+        // Pick all coins one by one and update the table[]
+        // values after the index greater than or equal to
+        // the value of the picked coin
+        for (int i=0; i<len; i++)
+            for (int j=coins[i]; j<=n; j++)
+                table[j] += table[j-coins[i]];
+ 
+        return table[n];
     }
     
 }
