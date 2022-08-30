@@ -32,42 +32,33 @@ import java.util.Arrays;
 public class MakingChange 
 {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) 
-    {
-        int[] coins = {1,2,3};
-        int len = coins.length;
-        int sum = 4;
-        System.out.println(numberOfWaysToMakeChange(coins, len, sum));
-    }
-    
-    private static numberOfWaysToMakeChange(int coins[], int len, int n)
-    {
-        //Time complexity of this function: O(len * n)
-        //Space Complexity of this function: O(n)
- 
-        // table[i] will be storing the number of solutions
-        // for value i. We need n+1 rows as the table is
-        // constructed in bottom up manner using the base
-        // case (n = 0)
-        long[] table = new long[n+1];
- 
-        // Initialize all table values as 0
-        Arrays.fill(table, 0);   //O(n)
- 
-        // Base case (If given value is 0)
-        table[0] = 1;
- 
-        // Pick all coins one by one and update the table[]
-        // values after the index greater than or equal to
-        // the value of the picked coin
-        for (int i=0; i<len; i++)
-            for (int j=coins[i]; j<=n; j++)
-                table[j] += table[j-coins[i]];
- 
-        return table[n];
-    }
+    public static void main(String[] args)
+   {
+      int[] coins = {1,2,3};
+      Map<Integer, Integer> map = new HashMap<>();
+      System.out.println(numOfWaysToMakeChange(coins, coins.length, 14, map));
+   }
+
+   private static int numOfWaysToMakeChange(int[] coins, int n, int sum, Map<Integer, Integer> map)
+   {
+      if (map.get(sum) != null)
+      {
+         return map.get(sum);
+      }
+      if (sum == 0)
+      {
+         return 1;
+      }
+
+      if (sum < 0)
+         return 0;
+
+      if (n <= 0)
+         return 0;
+
+      map.put(sum, numOfWaysToMakeChange(coins, n - 1, sum, map));
+      map.put(sum - coins[n-1], numOfWaysToMakeChange(coins, n, sum - coins[n - 1], map));
+      return map.get(sum) + map.get(sum - coins[n-1]) + 1;
+   }
     
 }
