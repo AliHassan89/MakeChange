@@ -53,6 +53,9 @@ public class MakingChange
       if (sum < 0)
          return 0;
 
+      // If there are no coins and sum
+      // is greater than 0, then no
+      // solution exist
       if (n <= 0)
          return 0;
 
